@@ -13,6 +13,7 @@ fn main() {
         28,
         100,
     );
+    assert_eq!(result, Some(10_000));
     println!("Time elapsed: {:?}", start.elapsed());
     println!("{:?}", result);
 

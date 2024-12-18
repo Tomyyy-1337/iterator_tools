@@ -1,6 +1,19 @@
 pub struct ParallelPosition;
 
 impl ParallelPosition {
+    /// Find the position of the first element in the iterator that satisfies the condition
+    /// and return the position of the element. If no element satisfies the condition, return None.
+    /// 
+    /// * `iterator` - The iterator to search
+    /// * `condition` - The condition to satisfy
+    /// * `num_threads` - The number of threads to use
+    /// * `chunk_size` - The number of elements per thread
+    /// 
+    /// Example:
+    /// ```rust
+    ///let result = ParallelPosition::find(0.. ,|| x == 10_000, 28, 100);
+    ///assert_eq!(result, Some(10_000));
+    /// ```
     pub fn find<T> (
         mut iterator: impl Iterator<Item = T>,
         condition: impl Fn(T) -> bool + Send + Copy + 'static,
