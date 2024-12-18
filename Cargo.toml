@@ -1,5 +1,5 @@
 [package]
-name = "more_iterator_tools"
+name = "iterator_tools"
 version = "0.1.0"
 edition = "2021"
 

@@ -1,6 +1,6 @@
 use std::thread::sleep;
 
-use more_iterator_tools::ParallelPosition;
+use iterator_tools::ParallelPosition;
 
 fn main() {
     let start = std::time::Instant::now();
