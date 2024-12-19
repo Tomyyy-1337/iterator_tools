@@ -1,8 +1,13 @@
-use std::{ops::AddAssign, sync::Arc};
+use std::ops::AddAssign;
 
 pub struct ParallelSum;
 
 impl ParallelSum {
+    pub fn sum() {
+
+    }
+
+
     /// Sums the elements of an iterator after applying a function to each element in parallel.
     /// 
     /// * `iterator` - The iterator to sum
@@ -17,7 +22,7 @@ impl ParallelSum {
     /// ```
     pub fn map_sum<T, O> (
         mut iterator: impl Iterator<Item = T>,
-        map: Arc<dyn Fn(T) -> O + Send + Sync>,
+        map: fn(T) -> O,
         num_threads: usize,
         chunk_size: usize,
     ) -> O  
@@ -32,7 +37,7 @@ impl ParallelSum {
             if iterator.peek().is_none() {
                 break;
             }
-            Self::spawn_thread_from_iter(chunk_size, &mut iterator, &sender, Arc::clone(&map));
+            Self::spawn_thread_from_iter(chunk_size, &mut iterator, &sender, map);
         }
         let mut sum = O::default();
         for part_sum in receiver.iter() {
@@ -40,7 +45,7 @@ impl ParallelSum {
             if iterator.peek().is_none() {
                 break;
             }
-            Self::spawn_thread_from_iter(chunk_size, &mut iterator, &sender, Arc::clone(&map));
+            Self::spawn_thread_from_iter(chunk_size, &mut iterator, &sender, map);
         }
         drop(sender);
         for part_sum in receiver.iter() {
@@ -53,7 +58,7 @@ impl ParallelSum {
         chunk_size: usize,
         iterator: &mut impl Iterator<Item = T>,
         sender: &std::sync::mpsc::Sender<O>,
-        map: Arc<dyn Fn(T) -> O + Send + Sync>,
+        map: fn(T) -> O,
     ) 
     where
         T: Send + 'static,
@@ -76,21 +81,21 @@ mod tests {
     fn test_parallel_sum() {
         let result = ParallelSum::map_sum(
             0..=100u64,
-            Arc::new(|x| x),
+            |x| x,
             10,
             1000,
         );
         assert_eq!(result, 100 * 101 / 2);
         let result = ParallelSum::map_sum(
             0..=100u64,
-            Arc::new(|x| x),
+            |x| x,
             10,
             100,
         );
         assert_eq!(result, 100 * 101 / 2);
         let result = ParallelSum::map_sum(
             0..=100u64,
-            Arc::new(|x| x),
+            |x| x,
             10,
             10,
         );
@@ -101,7 +106,7 @@ mod tests {
     fn test_parallel_sum_2() {
         let result = ParallelSum::map_sum(
             0..=100u64,
-            Arc::new(|x| x * x),
+            |x| x * x,
             10,
             10,
         );

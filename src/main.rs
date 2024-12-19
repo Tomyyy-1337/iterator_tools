@@ -25,4 +25,7 @@ fn main() {
     
     println!("Time elapsed: {:?}", start.elapsed());
     println!("{:?}", result);
+
+    
+
 }
