@@ -1,5 +1,6 @@
-pub mod iterator_tools;
-mod test;
+pub mod parallel_position;
+pub mod parallel_sum;
 
-pub use iterator_tools::ParallelPosition;
+pub use parallel_position::ParallelPosition;
+pub use parallel_sum::ParallelSum;
 
