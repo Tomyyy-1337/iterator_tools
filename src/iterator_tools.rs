@@ -11,7 +11,7 @@ impl ParallelPosition {
     /// 
     /// Example:
     /// ```rust
-    ///let result = ParallelPosition::find(0.. ,|| x == 10_000, 28, 100);
+    ///let result = ParallelPosition::find(0.. ,|x| x == 10_000, 28, 100);
     ///assert_eq!(result, Some(10_000));
     /// ```
     pub fn find<T> (
